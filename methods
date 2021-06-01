@@ -1,0 +1,6 @@
+.downcase - to lowercase non modifying
+.upcase - to upper case non modifying
+.downcase! - to lowercase destructive
+.upcase! - to uppercase destructive
+.casecmp() - compare value of 2 strings, ignoring case (String#casecmp)
+{String#<=>} - compare 2 strings, case-sensitive
