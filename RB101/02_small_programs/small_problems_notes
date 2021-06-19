@@ -1,0 +1,121 @@
+### Flowchart
+
+- flowcharting = imperative/procedural way to solve problem
+- methods = declarative way to solve problem (higher level syntax of programming languages)
+
+- hard to have confidence in long pieces of pseudocode as we can't test the logic (can only test logic of actual code)
+    therefore, best to split into SUBPROCESS
+        - can use declarative syntax ie find_largest instead of outlining step by step process
+            - allows us to think at a higher level about overall logic rather than getting bogged down in low-level details of HOW
+
+
+### Precedence 
+
+- BODMAS
+- operator precedence
+```
+2 + 5             # Two operands (2 and 5)
+!true             # Unary: One operand (true)
+value ? 1 : 2     # Ternary: Three operands (value, 1, 2)
+```
+- parantheses override the default evaluation order
+- controls order of evaluation
+    - operators and expressions
+- when two operators with same precedence, operations happen left-to-right
+- but can get unexpected results when using `||` or `&&` (short-circuit operators) or ternary operator (`a ? b : c`)
+- aim to use parantheses to avoid precedence issues
+
+- an operator which has higher precedence **binds** more tightly to the operands. 
+    eg. `3 + 5 * 7`
+        the `*` binds tighter to the `5` and `7`, so `5 * 7` will be evaluated first
+
+#### Evaluation order
+- precedence determines the order in which expressions get evaluated (sometimes)
+- what affects the order of evaluation
+    - precedence
+    - left-to-right evaluation
+    - right-to-left evaluation
+    - short-circuiting
+    - ternery expressions
+- with short circuiting and ternery expressions, `?:`, `&&` and `||` get treated differently from other operators, and subexpressions don't get evalutaed unless needed 
+
+#### Further example
+```
+array = [1, 2, 3]
+
+array.map { |num| num + 1 }     # => [2, 3, 4]
+```
+__add p to inspect__
+```
+p array.map { |num| num + 1 }      #  outputs [2, 3, 4]
+                                   #  => [2, 3, 4]
+```
+vs
+```
+array.map do |num|
+  num + 1
+end                                 #   => [2, 3, 4]
+```
+__add p to inspect__
+```
+p array.map do |num|
+  num + 1                   #  outputs #<Enumerator: [1, 2, 3]:map>
+end                           #  => #<Enumerator: [1, 2, 3]:map>
+```
+
+- blocks have the lowest precedence
+    - `{ }` has slightly higher precedence than `do...end`
+
+- so in second example 
+    - `array.map` binds to `p` tighter, so `array.map` is invoked returning an Enumerator object instead of returning what happens in the block.
+    ( note: `p` doesn't actually take a block, the block gets ignored)
+- vs in first example
+    - the `{}` block binds tighter to `array.map` and so it gets evaluated first, then the return value is passed to `p`
+
+__using parantheses to visualise order__
+```
+array = [1, 2, 3]
+
+p(array.map) do |num|
+  num + 1                           #  <Enumerator: [1, 2, 3]:map>
+end                                 #  => <Enumerator: [1, 2, 3]:map>
+
+p(array.map { |num| num + 1 })      # [2, 3, 4]
+                                    # => [2, 3, 4]
+```
+
+#### Ruby's `tap` methods
+- debugging tool
+- Object instance method
+- passes calling object into a block, then returns that object.
+```
+mapped_array = array.map { |num| num + 1 }
+
+mapped_array.tap { |value| p value }              # => [2, 3, 4]
+```
+- the result of `array.map { |num| num + 1 }` is `[2, 3, 4]` which then gets used to call `tap`
+- use to debug intermediate objects in method chains
+eg
+```
+(1..10)                 .tap { |x| p x }   # 1..10
+ .to_a                  .tap { |x| p x }   # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+ .select {|x| x.even? } .tap { |x| p x }   # [2, 4, 6, 8, 10]
+ .map {|x| x*x }        .tap { |x| p x }   # [4, 16, 36, 64, 100]
+```
+
+- Rubyists prefer yaml format for configuration files.
+    - to use a module that parses a .yml files
+
+```
+file.yml
+welcome: "Welcome to Calculator! Enter your name:"
+valid_name: "Make sure to enter a valid name."
+```
+```
+file.rb
+# at the top of file
+
+require 'yaml'
+MESSAGES = YAML.load_file('file.yml')
+```
+    - parses yaml key-value pairs into a Ruby hash

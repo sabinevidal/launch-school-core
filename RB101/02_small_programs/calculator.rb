@@ -48,3 +48,5 @@ if operator == '1'    #string
 5. local variables initialised within an if can be accessed outside the if
 
 6. if expressions can return a value
+
+=end
