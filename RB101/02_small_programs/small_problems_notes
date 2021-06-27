@@ -84,7 +84,7 @@ p(array.map { |num| num + 1 })      # [2, 3, 4]
                                     # => [2, 3, 4]
 ```
 
-#### Ruby's `tap` methods
+### Ruby's `tap` methods
 - debugging tool
 - Object instance method
 - passes calling object into a block, then returns that object.
@@ -103,6 +103,101 @@ eg
  .map {|x| x*x }        .tap { |x| p x }   # [4, 16, 36, 64, 100]
 ```
 
+- to inspect anything
+`whatever.inspect()`
+
+### Naming
+- the more descriptive the variable name the better
+- rather don't hardcode possible repsonse values as a variable name, rather capture the intent of the variable
+eg
+`play_again` instead of `yes_or_no`
+
+- usually use `snake_case` when naming everything
+*except*
+`CamelCase` for **classes**
+`UPPERCASE` for **constants**
+
+- `Constants` should be immutable/unchanged
+
+### Method notes
+
+- methods should be short, and only does one thing with limited responsibilty
+    - don't `return` **meaningful** values
+- methods within a program should be at the same level of abstraction
+    eg. given the below methods to use on an array of 'cards' which one stands out?
+        `deal()`
+        `hit()`
+        `stay()`
+        `iterate_through_cards()` <- this one
+    The last one stands out as it's not at the same abstraction level as the others. The other methods follow the 'language' of card games, verbs which apply.
+    Specify **what** to do, but implementation details are in actual method - don't need to think about it.
+    `iterate_through_cards()` is **how** something must be done. ie. the programmer should actually be thinking about this, not just passing it off to a method with no details
+- method should either return a value with no side effects *or* perform side-effects with no return value
+    - method name should reflect whether it has side-effects or not. eg. some std Ruby library methods with `!` mean there are side-effects
+- method names should reflect mutation
+    - returning a value vs mutating a value
+    eg
+    ```
+    #mutate
+    def update_total(total, cards)
+    end
+    # total is changed
+    ```
+    vs
+    ```
+    #return
+    def total(cards) # [1, 2, 3]
+    end
+    # => Integer
+    #returns an integer which is the total
+    ```
+    - take note of names and what you'd expect each method to do
+
+- programs are comprised of hundreds/thousands of small methods
+
+- don't be afraid to refactor code once you have a better idea of how a method/s should work
+
+- methods which just display things should be named to show they are outputting a value
+    **- use prefixes**
+    eg. `print_greeting` `say_greeting` or `display_greeting`
+    - don't *mutate* or *return* a value in these methods
+
+### Truthiness
+- in Ruby everything is 'truthy' (ie `true`) except `nil` and `false`
+- we don't need to compare an expression to `true` or `false`
+
+
+### Other tips
+- don't prematurely exit the program
+    - only one exit point
+- indentation: 2 spaces
+- `do/while` vs `while` loops
+    - `while` loop requires variables to be initialised outside of the loop
+        eg
+        this will throw an error `undefined local variable or method 'answer'`
+        ```
+        while answer.downcase != 'n' do
+            puts "Continue? (y/n)"
+            answer = gets.chomp
+        end
+        ```
+        so need to do this
+        ```
+        answer = ''
+        while answer.downcase != 'n' do
+            puts "Continue? (y/n)"
+            answer = gets.chomp
+        end
+        ```
+    - `do/while` loop would be a better implementation as entire code is contained in loop
+        eg
+        ```
+        loop do
+            puts "Continue? (y/n)"
+            answer = gets.chomp
+            break if answer.downcase == 'n'
+        end
+        ```
 - Rubyists prefer yaml format for configuration files.
     - to use a module that parses a .yml files
 
@@ -119,3 +214,25 @@ require 'yaml'
 MESSAGES = YAML.load_file('file.yml')
 ```
     - parses yaml key-value pairs into a Ruby hash
+
+- Heredoc
+    - define a multiline string, while maintaining the original indentation and formatting
+```
+  message = <<-MSG
+    What operation would you like to perform?
+    1) add
+    2) subtract
+    3) multiply
+    4) divide
+  MSG
+```
+or
+```
+message = %Q(
+  What operation would you like to perform?
+    1. add
+    2. subtract
+    3. multiply
+    4. divide
+)
+```
