@@ -236,3 +236,12 @@ message = %Q(
     4. divide
 )
 ```
+
+## Variable Scope
+### Local Variables
+- local variable scoping rules are mostly encountered in *method definition* and *method invocation with a block*
+
+#### Variables and blocks
+
+
+#### Variables and method definitions
