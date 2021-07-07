@@ -1,0 +1,99 @@
+1.
+10.times { |i| puts (" "*i) << "The Flintstones Rock!"}
+The Flintstones Rock!
+ The Flintstones Rock!
+  The Flintstones Rock!
+   The Flintstones Rock!
+    The Flintstones Rock!
+     The Flintstones Rock!
+      The Flintstones Rock!
+       The Flintstones Rock!
+        The Flintstones Rock!
+         The Flintstones Rock!
+
+2.
+TypeError: no implicit conversion of Integer into String
+As the result of `(40 + 2)` will be an integer, but `#+` is expecting a string.
+
+# Add #to_s to the paranthese so the result is converted to a string
+puts "the value of 40 + 2 is " + (40 + 2).to_s
+the value of 40 + 2 is 42
+
+# Use string interpolation
+puts "the value of 40 + 2 is #{40+2}"
+the value of 40 + 2 is 42
+
+3.
+def factors(number)
+  divisor = number
+  factors = []
+  loop do
+    if number <= 0
+        puts("Please input a valid integer")
+        break
+    end
+    factors << number / divisor if number % divisor == 0
+    divisor -= 1
+    break if divisor == 0
+  end
+end
+factors(0) # => Please input a valid integer
+factors(-2) # => Please input a valid integer
+factors(10) #=> [1, 2, 5, 10]
+
+3.1
+`number % divisor == 0` is used to ensure that the number can be divided by the divisor without a remainder and so is an integer.
+
+3.2
+`factors` at the end ensures that the array of factors is the last returned element of the method,
+    otherwise the return value would be `nil`
+
+
+4.
+Both implementations will have the same return value, however, there is a difference.
+In `rolling_buffer1`, the input argument `buffer` will be mutated as `<<` mutates the caller.
+In `rolling_buffer2` the input argument `input_array` will not be mutated and will be empty if it's called afterwards
+    as `+` is non-mutating.
+
+5.
+The limit variable is not available in the method's scope as methods only have acess to variables defined within their definition or if they're passed in as an argument.
+
+I would add limit as an argument to fib
+def fib(first_num, second_num, limit)
+    while first_num + second_num < limit
+    sum = first_num + second_num
+    first_num = second_num
+    second_num = sum
+  end
+  sum
+end
+
+result = fib(0, 1, limit)
+puts "result is #{result}"
+
+6.
+=> 34
+This output comes from 42 - 8
+The `mess_with_it()` method does not change the `answer` variable, it merely uses it as an input, with the output of the method being assigned to `new_answer`.
+
+7.
+Yes it would change the family's data.
+HashKey#[]= is indexed assignment and is mutating.
+As the method calls this directly on the inputted hash without re-assinging it.
+
+8.
+"paper"
+
+Need to work out result of innermost rps calls and then work outwards.
+rps("rock", "paper"), rps("rock", "scissors")
+=> "paper", "rock"
+rps("paper", "rock")
+=> "paper"
+rps("paper", "rock") # "rock" argument comes from the outermost expression.
+
+9.
+"no"
+
+The `foo` method's return value will always be "yes"
+    the foo "yes" value will override `bar`'s default param
+    "yes == "no" will return false in ther ternary operation and so will return "no"

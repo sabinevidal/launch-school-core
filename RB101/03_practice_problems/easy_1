@@ -1,0 +1,56 @@
+1.
+
+1
+2
+2
+3
+
+# .uniq is a non-mutating method, and so it will return the unique integers in the numbers array
+    but it will not modify the actual array
+    puts will return the numbers each on a new line
+
+2.
+
+`!=` means not equal
+`!` before something turns that object into its opposite
+`!!` before something is used to run the object into its boolean equivalent
+`!` or `?` after something (a method) is not Ruby syntax, but is part of the method name
+`? :` is the terneray operator
+
+3.
+advice = "Few things in life are as important as house training your pet dinosaur."
+
+advice["important"]= "urgent"
+
+puts advice
+=> Few things in life are as urgent as house training your pet dinosaur.
+
+# or advice.gsub!('important', 'urgent')
+
+4.
+`numbers.delete_at(1)` will delete the integer at index 1 (ie 2) # numbers = [1, 3, 4, 5]
+`numbers.delete(1)` will delete the integer `1` if it is in the array # numbers = [2, 3, 4, 5]
+
+5.
+`(10..100).include?42`
+=> true
+# or `(10..100).cover?42`
+    difference between #include? and #cover?:
+        #include is a lot more complex and is related to the Enumerable module.
+        #cover is simpler and is related to the Comparable module.
+
+6.
+famous_words = "seven years ago..."
+famous_words.prepend("Four score and ")
+=> "Four score and seven years ago..."
+
+"Four score and " + famous_words
+=> "Four score and seven years ago..."
+
+7.
+flintstones.flatten!
+ => ["Fred", "Wilma", "Barney", "Betty", "BamBam", "Pebbles"]
+
+8.
+flintstones.assoc("Barney")
+=> ["Barney", 2]

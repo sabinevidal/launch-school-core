@@ -1,0 +1,39 @@
+1.
+Nothing, as greeting will always be evaluated as 'true' so the `if` block won't be executed.
+    However, the local variable 'greeting' will still be initialised, but to `nil`.
+
+2.
+{:a=>"hi there"}
+The value of greetings will be changed, as the new variable `informal_greeting` is a reference to the value of the `greetings` hash.
+    The 'there' was appended with `<<` to the string, which is mutating and so the original hash object would be modified.
+    Note: only the `a` key-value pair would be modified if there were more key-value pairs in the hash.
+
+3.
+A and B will output
+"one is: one"
+"two is: two"
+"three is: three"
+
+As the method is merely re-assinging the variables within the scope of the method, as a reference is passed in, but re-assingment isn't mutating.
+
+C will output
+"one is: two"
+"two is: three"
+"three is: one"
+
+#.gsub! is a mutating method and is replacing the original value with a new value for each variable.
+So even though only a reference is passed into the method like the others, the original objects are modified.
+
+4.
+
+def dot_separated_ip_address?(input_string)
+  dot_separated_words = input_string.split(".")
+  return false unless dot_separated_words.size == 4
+
+  while dot_separated_words.size > 0 do
+    word = dot_separated_words.pop
+    return false unless is_an_ip_number?(word)
+  end
+  return true
+end
+

@@ -1,0 +1,68 @@
+1.
+Original
+  a_outer = 42
+  b_outer = "forty two"
+  c_outer = [42]
+  d_outer = c_outer[0]
+
+The object_ids won't change when they're called inside the block, however they will change when the variables are re-assigned. New objects have been created.
+When the `_inner` variables are assigned to the `_outer` variables, the `inner` variables will point to the same object_ids as the outer variables.
+the `outer` variables will change both there values and object ids compared to before the block.
+None of the `_inner_` variables will be available at the end.
+
+2.
+The outputs until the inner method call will be the same as above.
+However, the method does not affect the variables, as the method gets the values of the arguments passed in, not the actual variables.
+The variables in the inner method are entirely separate for the variables outside, they just share the same name.
+
+3.
+"My string looks like this now: pumpkins"
+The string will not be modified by the method as it uses `+=` which is re-assingment and is non-mutating.
+The local variable `a_string_param` will be "pumpkinsrutabaga" which is a new object.
+
+"My array looks like this now: ["pumpkins", "rutabaga"]"
+They array will be modified by the method as `<<` does mutate the variable.
+So the original array has a new element appended to it, and the result is available 'outside' of the method.
+
+4.
+"My string looks like this now: pumpkinsrutabaga"
+"My array looks like this now: ["pumpkins"]"
+
+See reasoning above for the difference between `+=` and `<<`
+
+5.
+Best way would be to be more explicit.
+Rename the method so it is obvious what it does.
+Make sure the same operator is used both the string and array.
+Explicitly return the new variables inside the method.
+And then when calling the method, ensure the original variables are re-assigned to the inner variables.
+
+def add_rutabaga(a_string_param, an_array_param)
+  a_string_param += "rutabaga"
+  an_array_param += ["rutabaga"]
+
+  return a_string_param, an_array_param
+end
+
+my_string = "pumpkins"
+my_array = ["pumpkins"]
+my_string, my_array = add_rutabaga(my_string, my_array)
+
+puts "My string looks like this now: #{my_string}"
+puts "My array looks like this now: #{my_array}"
+
+=> My string looks like this now: pumpkinsrutabaga
+=> My array looks like this now: ["pumpkins", "rutabaga"]
+
+6.
+def color_valid(color)
+  color == "blue" || color == "green" ? true : false
+end
+
+or
+
+def color_valid(color)
+  color == "blue" || color == "green"
+end
+
+# as Ruby will automatically read this statement as either "truthy" or "false" and true/false don't need to be explicitly returned
