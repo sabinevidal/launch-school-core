@@ -1,0 +1,112 @@
+1.
+[1, 2, 3].select do |num|
+  num > 5
+  'hi'
+end
+
+=> [1,2,3]
+
+Selection is based on the truthiness of the block's return value.
+    Return value of the bloack will always be "hi" as it's the last expression.
+    "hi" is a truthy value, so the new array returned will be all the elements in the original array.
+
+2.
+['ant', 'bat', 'caterpillar'].count do |str|
+  str.length < 4
+end
+
+=> 1
+
+Use the docs:
+    If a block is given, counts the number of elements for which the block returns a true value.
+    `count` considers the truthiness of the block's return value
+
+3.
+[1, 2, 3].reject do |num|
+  puts num
+end
+
+=> [1,2,3]
+
+`reject` returns the elements which evaluate as 'falsey' in the block
+    `puts` returns `nil` so the block will always evaluate to false.
+    All elements will be returned.
+
+4.
+['ant', 'bear', 'cat'].each_with_object({}) do |value, hash|
+  hash[value[0]] = value
+end
+
+=> { "a" => "ant", "b" => "bear", "c" => "cat"}
+
+`each_with_object` is initially passed an empty object as an argument (eg array or hash).
+  It then iterates through the given collection and updates the value of the object based on the block.
+  The new object is then returned, including the updates from the block iterations.
+  In this example, a hash is returned with the 3 elements originally in an array.
+
+5.
+hash = { a: 'ant', b: 'bear' }
+hash.shift
+
+=> [:a, 'ant']
+
+Looking at the docs:
+  `Hash#shift` removes the the first hash entry and returns the key-value pair in an array.
+  It is destructive and the original hash will return the remaining elements.
+
+6.
+['ant', 'bear', 'caterpillar'].pop.size
+
+=> 11
+
+`Array#pop` destructively removes the last element in an array and returns the rmoved element.
+  This expression has `size` chained after `pop` and so the size of the returned value from `pop` will be returned.
+  `size` called on 'caterpillar' will return 11 as there are 11 characters.
+
+7.
+[1, 2, 3].any? do |num|
+  puts num
+  num.odd?
+end
+
+=> true
+`any?` evaluates whether any of the elements in the collection has a truthy value in relation ot the block.
+  As `odd?` checks whether an integer is odd, it will return true on the first iteration.
+  `any?` will stop as soon as a block evaluates to true as only one true value is needed so no more iterations are needed.
+
+8.
+arr = [1, 2, 3, 4, 5]
+arr.take(2)
+
+=> [1, 2]
+`take` selects the the first specified elements from an array depending on the value of the argument.
+  It's not destructive and the original array won't be mutated, which we can see if we call it.
+
+9.
+{ a: 'ant', b: 'bear' }.map do |key, value|
+  if value.size > 3
+    value
+  end
+end
+
+=> [nil, 'bear']
+The return value of `map` is an array.
+  the if block will only evaluate as true and therefore return the value, if the length of value is greater than 3.
+  Therefore, with the first iteration of 'ant', the condition will evaluate as false and the value won't be returned.
+  The `if` statement will therefore return `nil` which will be in the array created by `map`.
+
+10.
+
+[1, 2, 3].map do |num|
+  if num > 1
+    puts num
+  else
+    num
+  end
+end
+
+=> [1, nil, nil]
+The return value of the block is determined by the last expression evaluated.
+  The `if` statement leads to the first iteration return 1.
+  The second and third iteration will lead to the numbers being `put`, however, their return value will be nil each time.
+  Map creates a new array using the return values, not the numbers being output.
