@@ -1,0 +1,106 @@
+1.
+flintstones = ["Fred", "Barney", "Wilma", "Betty", "Pebbles", "BamBam"]
+
+flintstones.each_with_index.to_h
+=> {"Fred"=>0, "Barney"=>1, "Wilma"=>2, "Betty"=>3, "Pebbles"=>4, "BamBam"=>5}
+
+2.
+ages = { "Herman" => 32, "Lily" => 30, "Grandpa" => 5843, "Eddie" => 10, "Marilyn" => 22, "Spot" => 237 }
+
+ages.values.sum
+=> 6174
+
+3.
+ages = { "Herman" => 32, "Lily" => 30, "Grandpa" => 402, "Eddie" => 10 }
+
+ages.delete_if {|_, age| age > 100 }
+ => {"Herman"=>32, "Lily"=>30, "Eddie"=>10}
+
+4.
+ages = { "Herman" => 32, "Lily" => 30, "Grandpa" => 5843, "Eddie" => 10, "Marilyn" => 22, "Spot" => 237 }
+
+ages.values.min
+ => 10
+
+5.
+flintstones = %w(Fred Barney Wilma Betty BamBam Pebbles)
+
+flintstones.index {|name| name[0, 2] == "Be"}
+=> 3
+
+6.
+flintstones = %w(Fred Barney Wilma Betty BamBam Pebbles)
+
+flintstones.map! { |name| name[0, 3] }
+=> ["Fre", "Bar", "Wil", "Bet", "Bam", "Peb"]
+
+7.
+statement = "The Flintstones Rock"
+
+
+result = {}
+letters = ('A'..'Z').to_a + ('a'..'z').to_a
+letters.each do |letter|
+  letter_frequency = statement.scan(letter).count
+  result[letter] = letter_frequency if letter_frequency > 0
+end
+
+=> {"F"=>1, "R"=>1, "T"=>1, "c"=>1, "e"=>2, "h"=>1, "i"=>1, "k"=>1, "l"=>1, "n"=>2, "o"=>2, "s"=>2, "t"=>2}
+
+8.
+numbers = [1, 2, 3, 4]
+numbers.each do |number|
+  p number
+  numbers.shift(1)
+end
+1
+3
+ => [3, 4]
+
+Debugging:
+numbers = [1, 2, 3, 4]
+numbers.each_with_index do |number, index|
+  p "#{index}  #{numbers.inspect}  #{number}"
+  numbers.shift(1)
+end
+
+"0  [1, 2, 3, 4]  1"
+"1  [2, 3, 4]  3"
+
+so while loop is iterating, the array is being shortened and shifted.
+    The loop counter is compared against the current legnth rather than the original length.
+    So the removal of the first item means that the second item is now at index 0 and the third is now at index 1, meaning the original third element will now be in 'second place'.
+
+numbers = [1, 2, 3, 4]
+numbers.each do |number|
+  p number
+  numbers.pop(1)
+end
+1
+2
+ => [1, 2]
+
+9.
+words = "the flintstones rock"
+
+words.split.map{|word| word.capitalize }.join(' ')
+
+10.
+munsters = {
+  "Herman" => { "age" => 32, "gender" => "male" },
+  "Lily" => { "age" => 30, "gender" => "female" },
+  "Grandpa" => { "age" => 402, "gender" => "male" },
+  "Eddie" => { "age" => 10, "gender" => "male" },
+  "Marilyn" => { "age" => 23, "gender" => "female"}
+}
+
+munsters.each do |name, details|
+  case details["age"]
+  when 0...18
+    details["age_group"] = "kid"
+  when 18...65
+    details["age_group"] = "adult"
+  else
+    details["age_group"] = "senior"
+  end
+end
