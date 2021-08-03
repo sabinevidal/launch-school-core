@@ -1,6 +1,6 @@
 require 'pry'
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
-                   [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+                 [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
@@ -22,7 +22,7 @@ def joinor(arr, delimiter=', ', word='or')
   end
 end
 
-# rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/AbcSize, Metrics/MethodLength
 def display_board(brd, user, computer)
   system 'clear'
   puts "You're '#{PLAYER_MARKER}'. Computer is '#{COMPUTER_MARKER}'."
@@ -41,7 +41,7 @@ def display_board(brd, user, computer)
   puts "     |     |"
   puts ""
 end
-# rubocop:enable Metrics/AbcSize
+# rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
 def initialize_board
   new_board = {}
@@ -74,8 +74,7 @@ def play_game(user, computer)
 end
 
 def choose_player(user, computer)
-  current_player = [user, computer].sample
-  current_player
+  [user, computer].sample
 end
 
 def gameplay_loop(user, computer)
@@ -102,13 +101,11 @@ def turn_loop(current_player, brd, user, computer)
 end
 
 def place_piece!(current_player, brd, user, computer)
-  square = ''
   if current_player == user
     player_places_piece!(brd, user)
   elsif current_player == computer
     computer_places_piece!(brd)
   end
-
 end
 
 def player_places_piece!(brd, user)
@@ -125,29 +122,25 @@ end
 
 # Computer AI
 
+# rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 def computer_places_piece!(brd)
   square = nil
-
   # Offense
-  # iterate through winning lines and see if any are at risk
   WINNING_LINES.each do |line|
     square = find_at_risk_square(line, brd, COMPUTER_MARKER)
     break if square
   end
-
-  #Defence
+  # Defence
   if !square
     WINNING_LINES.each do |line|
       square = find_at_risk_square(line, brd, PLAYER_MARKER)
       break if square
     end
   end
-
   # pick middle square
   if !square && brd[5] == INITIAL_MARKER
     square = 5
   end
-
   # if no at risk square or middle, select a random one
   if !square
     square = empty_squares(brd).sample
@@ -155,14 +148,15 @@ def computer_places_piece!(brd)
 
   brd[square] = COMPUTER_MARKER
 end
+# rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 
 def find_at_risk_square(line, brd, marker)
-    if brd.values_at(*line).count(marker) == 2
-      # select the square that has an empty value
-      brd.select {|k, v| line.include?(k) && v == INITIAL_MARKER}.keys.first
-    else
-      nil
-    end
+  if brd.values_at(*line).count(marker) == 2
+    # select the square that has an empty value
+    brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
+  else
+    nil
+  end
 end
 
 def round_over(brd, user, computer)
@@ -172,15 +166,13 @@ def round_over(brd, user, computer)
     display_board(brd, user, computer)
     puts "********************************"
     puts "#{winner[:name]} won this round!"
-    puts "********************************"
-    sleep(1)
   else
     display_board(brd, user, computer)
     puts "********************************"
     puts "This round is a tie!"
-    puts "********************************"
-    sleep(1)
   end
+  puts "********************************"
+  sleep(1)
 end
 
 # End game Logic
@@ -238,14 +230,11 @@ computer = {
 # Game Play
 
 loop do
-  board = initialize_board
-
   play_game(user, computer)
 
   prompt "Play again? (y or n)"
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
-
 end
 
 prompt "Thanks for playing Tic Tac Toe! Goodbye!"
