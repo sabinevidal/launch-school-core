@@ -186,6 +186,8 @@ dealer = {
 loop do
   system 'clear'
   prompt "Welcome to Twenty-One!"
+  prompt "Player who's total is closest to 21 wins the round"
+  prompt "If player's card total goes above 21, then that player is busted"
   prompt "First to win #{CHAMPION_SCORE} rounds is the ultimate champion!"
   enter_to_continue
   player[:wins] = 0

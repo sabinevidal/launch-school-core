@@ -4,11 +4,17 @@ WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
-CHAMPION_SCORE = 5
+CENTRE_SQUARE = 5
+CHAMPION_SCORE = 1
 
 # game setup
 def prompt(msg)
   puts "=> #{msg}"
+end
+
+def enter_to_continue
+  puts 'Press enter to continue'
+  $stdin.gets
 end
 
 def joinor(arr, delimiter=', ', word='or')
@@ -62,7 +68,7 @@ end
 def play_game(user, computer)
   system 'clear'
   puts "Welcome to Tic Tac Toe!"
-  puts "First to 5 wins!"
+  puts "First to #{CHAMPION_SCORE} wins!"
   puts "Let's see who will play first..."
   sleep(1)
   gameplay_loop(user, computer)
@@ -83,7 +89,7 @@ def gameplay_loop(user, computer)
     board = initialize_board
     current_player = choose_player(user, computer)
     prompt "The #{current_player[:name]} will play first!"
-    sleep(1)
+    enter_to_continue
     turn_loop(current_player, board, user, computer)
     round_over(board, user, computer)
     display_board(board, user, computer)
@@ -112,50 +118,49 @@ def player_places_piece!(brd, user)
   square = ''
   loop do
     prompt "Choose a square (#{joinor(empty_squares(brd))}):"
-    square = gets.chomp.to_i
-    break if empty_squares(brd).include?(square)
-    prompt "Sorry, that's not a valid choice"
+    square = gets.chomp
+    break if empty_squares(brd).include?(square.to_i) &&
+             square.to_i.to_s == square
+    prompt "Please enter a valid whole number"
   end
 
-  brd[square] = user[:token]
+  brd[square.to_i] = user[:token]
 end
 
 # Computer AI
 
-# rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 def computer_places_piece!(brd)
   square = nil
   # Offense
-  WINNING_LINES.each do |line|
-    square = find_at_risk_square(line, brd, COMPUTER_MARKER)
-    break if square
-  end
+  square = determine_strategic_move(brd, square, COMPUTER_MARKER)
   # Defence
   if !square
-    WINNING_LINES.each do |line|
-      square = find_at_risk_square(line, brd, PLAYER_MARKER)
-      break if square
-    end
+    square = determine_strategic_move(brd, square, PLAYER_MARKER)
   end
-  # pick middle square
-  if !square && brd[5] == INITIAL_MARKER
-    square = 5
+
+  if !square && brd[CENTRE_SQUARE] == INITIAL_MARKER
+    square = CENTRE_SQUARE
   end
-  # if no at risk square or middle, select a random one
+
   if !square
     square = empty_squares(brd).sample
   end
 
   brd[square] = COMPUTER_MARKER
 end
-# rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+
+def determine_strategic_move(brd, square, marker)
+  WINNING_LINES.each do |line|
+    square = find_at_risk_square(line, brd, marker)
+    break if square
+  end
+  square
+end
 
 def find_at_risk_square(line, brd, marker)
   if brd.values_at(*line).count(marker) == 2
     # select the square that has an empty value
     brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
-  else
-    nil
   end
 end
 
@@ -172,7 +177,7 @@ def round_over(brd, user, computer)
     puts "This round is a tie!"
   end
   puts "********************************"
-  sleep(1)
+  enter_to_continue
 end
 
 # End game Logic
@@ -216,6 +221,17 @@ def gameover?(brd, user, computer)
   someone_won?(brd, user, computer) || board_full?(brd)
 end
 
+def play_again?
+  prompt "Do you want to play again? (y or n)"
+  answer = nil
+  loop do
+    answer = gets.chomp
+    break if ['y', 'n'].include?(answer)
+    prompt "Sorry, please enter 'y' or 'n'"
+  end
+  answer.downcase.start_with?('y')
+end
+
 user = {
   name: 'Player',
   token: PLAYER_MARKER,
@@ -230,11 +246,11 @@ computer = {
 # Game Play
 
 loop do
+  user[:wins] = 0
+  computer[:wins] = 0
   play_game(user, computer)
 
-  prompt "Play again? (y or n)"
-  answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+  break unless play_again?
 end
 
 prompt "Thanks for playing Tic Tac Toe! Goodbye!"
