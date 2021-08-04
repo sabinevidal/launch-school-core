@@ -1,4 +1,3 @@
-require 'pry'
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
                  [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 INITIAL_MARKER = ' '
@@ -131,7 +130,7 @@ end
 
 def computer_places_piece!(brd)
   square = nil
-  # Offense
+  # Offence
   square = determine_strategic_move(brd, square, COMPUTER_MARKER)
   # Defence
   if !square
