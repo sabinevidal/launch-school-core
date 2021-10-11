@@ -136,6 +136,6 @@ end
 # Palindromic Numbers
 ```ruby
 def palindromic_number?(num)
-    palindrome?(num.to_s)
+    palindrome_arr?(num.digits)
 end
 ```
