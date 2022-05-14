@@ -27,7 +27,7 @@ method('input') == 'output'
 
 
 ## Code
-```
+```ruby
 DEGREE = "\xC2\xB0"
 
 def dms(flt)
@@ -41,7 +41,7 @@ end
 
 ## Refactor and clean
 Using `divmod` and accounting for -+360 degrees
-```
+```ruby
 DEGREE = "\xC2\xB0"
 
 def dms(flt)
@@ -249,7 +249,7 @@ Use #slice!
 2. assign #slice! with range of start to half of length
 2.
 ## Code
-```
+```ruby
 def halvsies(arr)
     half = (arr.length/2.0).round
     new_arr = arr.slice!(0, half)
